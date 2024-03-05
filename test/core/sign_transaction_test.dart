@@ -5,7 +5,6 @@ import 'package:http/http.dart';
 import 'package:test/test.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/src/utils/rlp.dart' as rlp;
-import 'package:web3dart/src/utils/typed_data.dart';
 import 'package:web3dart/web3dart.dart';
 
 const rawJson = '''[
@@ -150,13 +149,13 @@ void main() {
     });
   });
 
-  test('sign eip 1559 transaction without client', ()  {
+  test('sign eip 1559 transaction without client', () {
     final data = jsonDecode(rawJson) as List<dynamic>;
 
-     Future.forEach(data, (element)  {
+    Future.forEach(data, (element) {
       final tx = element as Map<String, dynamic>;
       final credentials =
-      EthPrivateKey.fromHex(strip0x(tx['privateKey'] as String));
+          EthPrivateKey.fromHex(strip0x(tx['privateKey'] as String));
       final transaction = Transaction(
         from: credentials.address,
         to: EthereumAddress.fromHex(tx['to'] as String),
@@ -174,7 +173,8 @@ void main() {
         data: tx['data'] ?? Uint8List(0),
       );
 
-      final signature = signTransactionRaw(transaction, credentials, chainId: 4);
+      final signature =
+          signTransactionRaw(transaction, credentials, chainId: 4);
 
       expect(
         bytesToHex(
@@ -185,7 +185,6 @@ void main() {
         strip0x(tx['signedTransactionRLP'] as String),
       );
     });
-
   });
 
   test('signs transactions', () async {
